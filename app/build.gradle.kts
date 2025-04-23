@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+
 
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
