@@ -3,19 +3,22 @@ package com.velik.vnotes.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-private val LightColors = lightColorScheme(
-    primary = Purple40,
-    onPrimary = PurpleGrey40,
-    surface = PurpleGrey40,
-    onSurface = PurpleGrey80
-)
 
-private val DarkColors = darkColorScheme(
-    primary = Purple80,
-    onPrimary = Purple40,
-    surface = PurpleGrey80,
-    onSurface = PurpleGrey40
+// Açık kağıt tonları
+val PaperBackground = Color(0xFFFFFBEA) // çok açık sarımsı
+val PaperSurface = Color(0xFFFFF8DC)    // açık krem
+val PaperPrimary = Color(0xFFB58B4C)    // kalem kahvesi
+val PaperOnPrimary = Color(0xFFFFFFFF)
+val PaperOnSurface = Color(0xFF3E2723)  // koyu kahve yazı
+
+val LightColors = lightColorScheme(
+    primary = PaperPrimary,
+    onPrimary = PaperOnPrimary,
+    background = PaperBackground,
+    surface = PaperSurface,
+    onSurface = PaperOnSurface
 )
 
 @Composable
@@ -23,11 +26,9 @@ fun VNotesTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (useDarkTheme) DarkColors else LightColors
-
     MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
+        colorScheme = LightColors,
+        typography = Typography(),
         content = content
     )
 }

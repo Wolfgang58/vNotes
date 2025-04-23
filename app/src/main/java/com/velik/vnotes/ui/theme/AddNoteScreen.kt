@@ -1,4 +1,4 @@
-package com.velik.vnotes.ui
+package com.velik.vnotes.ui.theme
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -11,41 +11,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.velik.vnotes.data.Note
+import com.velik.vnotes.ui.NoteViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavController) {
-    val notes = viewModel.notes.collectAsState().value
-    val note = notes.find { it.id == noteId }
-
-    if (note == null) {
-        Text("Not bulunamadı")
-        return
-    }
-
-    var title by rememberSaveable(noteId) { mutableStateOf(note.title) }
-    var content by rememberSaveable(noteId) { mutableStateOf(note.content) }
+fun AddNoteScreen(viewModel: NoteViewModel, navController: NavController) {
+    var title by rememberSaveable { mutableStateOf("") }
+    var content by rememberSaveable { mutableStateOf("") }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Notu Düzenle") })
+        TopAppBar(title = { Text("Yeni Not") })
     }) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
             Text(
-                text = "Not Başlığı",
+                text = "Başlık",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(4.dp))
             TextField(
                 value = title,
-                onValueChange = { content = it },
+                onValueChange = { title = it },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                textStyle=LocalTextStyle.current.copy(fontSize = 18.sp)
+                textStyle = LocalTextStyle.current.copy(fontSize = 18.sp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Not İçeriği",
+                text = "İçerik",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -56,7 +49,7 @@ fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavCon
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
-                textStyle=LocalTextStyle.current.copy(fontSize = 17.sp)
+                textStyle = LocalTextStyle.current.copy(fontSize = 17.sp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
@@ -65,9 +58,8 @@ fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavCon
                     navController.popBackStack()
                 }
             }, modifier = Modifier.align(Alignment.End)) {
-                Text("Güncelle")
+                Text("Kaydet")
             }
         }
     }
 }
-
