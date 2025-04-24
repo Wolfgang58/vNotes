@@ -23,29 +23,33 @@ fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavCon
         return
     }
 
-    var title by rememberSaveable(noteId) { mutableStateOf(note.title) }
-    var content by rememberSaveable(noteId) { mutableStateOf(note.content) }
+    // 🔥 FIXED: Don't bind directly to note.title in rememberSaveable
+    val initialTitle = remember(noteId) { note.title }
+    val initialContent = remember(noteId) { note.content }
+
+    var title by rememberSaveable(noteId) { mutableStateOf(initialTitle) }
+    var content by rememberSaveable(noteId) { mutableStateOf(initialContent) }
 
     Scaffold(topBar = {
         TopAppBar(title = { Text("Notu Düzenle") })
     }) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues).padding(16.dp)) {
             Text(
-                text = "Not Başlığı",
+                text = "Başlık",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(4.dp))
             TextField(
                 value = title,
-                onValueChange = { content = it },
+                onValueChange = { title = it },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
-                textStyle=LocalTextStyle.current.copy(fontSize = 18.sp)
+                textStyle = LocalTextStyle.current.copy(fontSize = 18.sp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Not İçeriği",
+                text = "İçerik",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -56,12 +60,18 @@ fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavCon
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
-                textStyle=LocalTextStyle.current.copy(fontSize = 17.sp)
+                textStyle = LocalTextStyle.current.copy(fontSize = 17.sp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 if (title.isNotBlank() && content.isNotBlank()) {
-                    viewModel.addNote(Note(title = title, content = content))
+                    viewModel.updateNote(
+                        Note(
+                            id = note.id,
+                            title = title,
+                            content = content
+                        )
+                    )
                     navController.popBackStack()
                 }
             }, modifier = Modifier.align(Alignment.End)) {
@@ -70,4 +80,5 @@ fun EditNoteScreen(viewModel: NoteViewModel, noteId: Int?, navController: NavCon
         }
     }
 }
+
 
