@@ -38,7 +38,7 @@ fun AddNoteScreen(viewModel: NoteViewModel, navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "İçerik",
+                text = "Not",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
