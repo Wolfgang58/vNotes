@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
-
     private val noteDao = NoteDatabase.getDatabase(application).noteDao()
 
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
@@ -35,9 +34,14 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
             noteDao.delete(note)
         }
     }
+
     fun updateNote(note: Note) {
         viewModelScope.launch {
             noteDao.update(note)
         }
+    }
+
+    fun getNoteById(id: Int?): Note? {
+        return _notes.value.find { it.id == id }
     }
 }
