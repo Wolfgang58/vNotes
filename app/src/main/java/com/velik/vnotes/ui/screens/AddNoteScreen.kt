@@ -56,7 +56,7 @@ fun AddNoteScreen(viewModel: NoteViewModel, navController: NavController) {
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text("Kaydet")
+                Text("Ekle")
             }
         }
     }
