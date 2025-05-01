@@ -72,6 +72,7 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.compose.material3:material3:1.2.1")
 
 
 

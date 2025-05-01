@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,21 +16,34 @@ import androidx.navigation.NavController
 import com.velik.vnotes.data.Note
 import com.velik.vnotes.ui.NoteViewModel
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteListScreen(viewModel: NoteViewModel, navController: NavController) {
-    val notes by viewModel.notes.collectAsState()
-
-    var noteToDelete by remember { mutableStateOf<Note?>(null) }
+    val notes by viewModel.filteredNotes.collectAsState()
+    val query by viewModel.searchQuery.collectAsState()
+    var selectedNote by remember { mutableStateOf<Note?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("VNotes") })
+            TopAppBar(
+                title = {
+                    OutlinedTextField(
+                        value = query,
+                        onValueChange = { viewModel.searchQuery.value = it },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        placeholder = { Text("Ara...") }
+                    )
+                }
+            )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("add") }) {
-                Text("+")
+            FloatingActionButton(onClick = { navController.navigate("add") })
+            {
+                Icon(Icons.Filled.Add, "Localized description")
             }
         }
     ) { paddingValues ->
@@ -42,23 +56,21 @@ fun NoteListScreen(viewModel: NoteViewModel, navController: NavController) {
                             .padding(8.dp)
                             .clickable {
                                 navController.navigate("edit/${note.id}")
-                            },
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                            }
                     ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(text = note.title, style = MaterialTheme.typography.titleMedium)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(text = note.content, style = MaterialTheme.typography.bodyMedium)
+                                Text(note.title, style = MaterialTheme.typography.titleMedium)
+                                Text(note.content, style = MaterialTheme.typography.bodyMedium)
                             }
 
                             IconButton(onClick = {
-                                noteToDelete = note
+                                selectedNote = note
                                 showDialog = true
                             }) {
                                 Icon(
@@ -72,15 +84,16 @@ fun NoteListScreen(viewModel: NoteViewModel, navController: NavController) {
                 }
             }
 
-            if (showDialog && noteToDelete != null) {
+            if (showDialog && selectedNote != null) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = { Text("Notu Sil") },
                     text = { Text("Bu notu silmek istediğine emin misin?") },
                     confirmButton = {
                         TextButton(onClick = {
-                            noteToDelete?.let { viewModel.deleteNote(it) }
+                            selectedNote?.let { viewModel.deleteNote(it) }
                             showDialog = false
+                            selectedNote = null
                         }) {
                             Text("Evet")
                         }
@@ -88,6 +101,7 @@ fun NoteListScreen(viewModel: NoteViewModel, navController: NavController) {
                     dismissButton = {
                         TextButton(onClick = {
                             showDialog = false
+                            selectedNote = null
                         }) {
                             Text("Hayır")
                         }

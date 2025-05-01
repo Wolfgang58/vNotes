@@ -17,7 +17,7 @@ import com.velik.vnotes.data.Note
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun NoteScreen(viewModel: NoteViewModel, navController: NavHostController) {
-    val notes by viewModel.notes.collectAsState()
+    val notes by viewModel.filteredNotes.collectAsState()
 
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
@@ -68,7 +68,7 @@ fun NoteScreen(viewModel: NoteViewModel, navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn {
-                items(notes) { note ->
+                items(notes) { note: Note ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
