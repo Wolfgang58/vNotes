@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,26 +26,29 @@ fun NoteListScreen(viewModel: NoteViewModel, navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    OutlinedTextField(
-                        value = query,
-                        onValueChange = { viewModel.searchQuery.value = it },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        placeholder = { Text("Ara...") }
-                    )
-                }
-            )
+            Column {
+                TopAppBar(
+                    title = { Text("VNotes") }
+                )
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { viewModel.searchQuery.value = it },
+                    placeholder = { Text("Ara...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    singleLine = true
+                )
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("add") })
-            {
-                Icon(Icons.Filled.Add, "Localized description")
+            FloatingActionButton(onClick = { navController.navigate("add") }) {
+                Text("+")
             }
         }
-    ) { paddingValues ->
+    )
+
+    { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             LazyColumn {
                 items(notes) { note ->
