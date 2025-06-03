@@ -22,6 +22,7 @@ fun NoteScreen(viewModel: NoteViewModel, navController: NavHostController) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
+
     Scaffold(
         topBar = {
             TopAppBar(

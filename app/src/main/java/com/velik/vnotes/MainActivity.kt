@@ -10,8 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.velik.vnotes.ui.NoteViewModel
-import com.velik.vnotes.ui.screens.AddNoteScreen
-import com.velik.vnotes.ui.screens.EditNoteScreen
+import com.velik.vnotes.ui.screens.AddOrEditNoteScreen
 import com.velik.vnotes.ui.screens.NoteListScreen
 import com.velik.vnotes.ui.theme.VNotesTheme
 
@@ -28,12 +27,13 @@ class MainActivity : ComponentActivity() {
                         composable("list") {
                             NoteListScreen(viewModel = viewModel, navController = navController)
                         }
-                        composable("add") {
-                            AddNoteScreen(viewModel = viewModel, navController = navController)
+                        composable("add/{noteId}") { backStackEntry ->
+                            val noteId = backStackEntry.arguments?.getString("noteId")?.toIntOrNull()
+                            AddOrEditNoteScreen(viewModel = viewModel, navController = navController, noteId = noteId)
                         }
                         composable("edit/{noteId}") { backStackEntry ->
                             val noteId = backStackEntry.arguments?.getString("noteId")?.toIntOrNull()
-                            EditNoteScreen(viewModel = viewModel, navController = navController, noteId = noteId)
+                            AddOrEditNoteScreen(viewModel = viewModel, navController = navController, noteId = noteId)
                         }
                     }
                 }
