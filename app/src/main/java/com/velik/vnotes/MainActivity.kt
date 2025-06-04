@@ -27,14 +27,23 @@ class MainActivity : ComponentActivity() {
                         composable("list") {
                             NoteListScreen(viewModel = viewModel, navController = navController)
                         }
-                        composable("add/{noteId}") { backStackEntry ->
-                            val noteId = backStackEntry.arguments?.getString("noteId")?.toIntOrNull()
-                            AddOrEditNoteScreen(viewModel = viewModel, navController = navController, noteId = noteId)
+                        composable("add") {
+                            AddOrEditNoteScreen(
+                                viewModel = viewModel,
+                                navController = navController,
+                                noteId = null // yeni not için
+                            )
                         }
+
                         composable("edit/{noteId}") { backStackEntry ->
                             val noteId = backStackEntry.arguments?.getString("noteId")?.toIntOrNull()
-                            AddOrEditNoteScreen(viewModel = viewModel, navController = navController, noteId = noteId)
+                            AddOrEditNoteScreen(
+                                viewModel = viewModel,
+                                navController = navController,
+                                noteId = noteId
+                            )
                         }
+
                     }
                 }
             }
