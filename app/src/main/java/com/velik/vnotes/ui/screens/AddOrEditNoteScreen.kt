@@ -1,5 +1,6 @@
 package com.velik.vnotes.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,8 +20,42 @@ fun AddOrEditNoteScreen(
     val existingNote = viewModel.getNoteById(noteId)
     var title by remember { mutableStateOf(existingNote?.title ?: "") }
     var content by remember { mutableStateOf(existingNote?.content ?: "") }
-
     var previousNote by remember { mutableStateOf<Note?>(null) }
+
+    val originalTitle = existingNote?.title ?: ""
+    val originalContent = existingNote?.content ?: ""
+
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    // 🔁 Geri tuşuna basıldığında
+    BackHandler {
+        if (title != originalTitle || content != originalContent) {
+            showExitDialog = true
+        } else {
+            navController.popBackStack()
+        }
+    }
+
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("Değişiklikler Kaydedilmedi") },
+            text = { Text("Çıkmak istediğinize emin misiniz? Kaydedilmemiş değişiklikler kaybolacak.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showExitDialog = false
+                    navController.popBackStack()
+                }) {
+                    Text("Evet")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExitDialog = false }) {
+                    Text("Hayır")
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
