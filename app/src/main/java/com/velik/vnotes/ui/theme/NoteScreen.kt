@@ -1,5 +1,8 @@
 package com.velik.vnotes.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.velik.vnotes.ui.components.UndoableTextField
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.velik.vnotes.data.Note
 
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun NoteScreen(viewModel: NoteViewModel, navController: NavHostController) {
@@ -35,20 +39,18 @@ fun NoteScreen(viewModel: NoteViewModel, navController: NavHostController) {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            OutlinedTextField(
+            UndoableTextField(
+                label = "Başlık",
                 value = title,
-                onValueChange = { title = it },
-                label = { Text("Başlık") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { title = it }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
+            UndoableTextField(
+                label = "İçerik",
                 value = content,
-                onValueChange = { content = it },
-                label = { Text("İçerik") },
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = { content = it }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
