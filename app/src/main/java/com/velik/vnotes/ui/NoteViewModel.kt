@@ -31,14 +31,14 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     // 📝 Not ekleme
     fun addNote(note: Note) {
         viewModelScope.launch {
-            noteDao.insert(note)
+            noteDao.insert(note.copy(updatedAt = System.currentTimeMillis()))
         }
     }
 
     // 📝 Not silme
     fun deleteNote(note: Note) {
         viewModelScope.launch {
-            noteDao.delete(note)
+            noteDao.delete(note.copy(updatedAt = System.currentTimeMillis()))
         }
     }
 
