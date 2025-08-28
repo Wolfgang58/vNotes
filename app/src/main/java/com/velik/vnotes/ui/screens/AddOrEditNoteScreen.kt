@@ -15,11 +15,13 @@ import com.velik.vnotes.ui.NoteViewModel
 fun AddOrEditNoteScreen(
     navController: NavHostController,
     viewModel: NoteViewModel,
-    noteId: Int?
+    noteId: Int? = null
 ) {
     val existingNote = viewModel.getNoteById(noteId)
+
     var title by remember { mutableStateOf(existingNote?.title ?: "") }
     var content by remember { mutableStateOf(existingNote?.content ?: "") }
+
     var previousNote by remember { mutableStateOf<Note?>(null) }
 
     val originalTitle = existingNote?.title ?: ""
@@ -27,7 +29,7 @@ fun AddOrEditNoteScreen(
 
     var showExitDialog by remember { mutableStateOf(false) }
 
-    // 🔁 Geri tuşuna basıldığında
+    // Geri tuşuna basıldığında
     BackHandler {
         if (title != originalTitle || content != originalContent) {
             showExitDialog = true

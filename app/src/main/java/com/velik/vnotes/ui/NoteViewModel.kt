@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
     private val noteDao = NoteDatabase.getDatabase(application).noteDao()
 
-    // 🔍 Arama çubuğu için query durumu
+    // Arama çubuğu için query durumu
     val searchQuery = MutableStateFlow("")
 
-    // 🔍 Aramaya göre filtrelenmiş notlar
+    // Aramaya göre filtrelenmiş notlar
     @OptIn(ExperimentalCoroutinesApi::class)
     val filteredNotes = searchQuery
         .flatMapLatest { query ->
@@ -28,28 +28,28 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
             }
         }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    // 📝 Not ekleme
+    // Not ekleme
     fun addNote(note: Note) {
         viewModelScope.launch {
             noteDao.insert(note.copy(updatedAt = System.currentTimeMillis()))
         }
     }
 
-    // 📝 Not silme
+    // Not silme
     fun deleteNote(note: Note) {
         viewModelScope.launch {
             noteDao.delete(note.copy(updatedAt = System.currentTimeMillis()))
         }
     }
 
-    // 📝 Not güncelleme
+    // Not güncelleme
     fun updateNote(note: Note) {
         viewModelScope.launch {
-            noteDao.update(note)
+            noteDao.update(note.copy(updatedAt = System.currentTimeMillis()))
         }
     }
 
-    // 📝 Not ID ile alma (edit ekranı için)
+    // Not ID ile alma (edit ekranı için)
     fun getNoteById(id: Int?): Note? {
         return filteredNotes.value.find { it.id == id }
     }
