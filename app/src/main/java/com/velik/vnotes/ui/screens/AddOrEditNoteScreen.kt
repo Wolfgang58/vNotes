@@ -53,7 +53,7 @@ fun AddOrEditNoteScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showExitDialog = false }) {
-                    Text("Hayır")
+                    Text("Çıkış")
                 }
             }
         )
